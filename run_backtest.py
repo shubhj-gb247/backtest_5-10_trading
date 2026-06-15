@@ -48,6 +48,23 @@ def _slice(panels, start, end):
     return {"close": panels["close"][m.values], "turnover": panels["turnover"][m.values]}
 
 
+def _subset_symbols(panels, symbols_file):
+    """Restrict the panel columns to a named universe (e.g. Nifty 50)."""
+    wanted = []
+    for line in Path(symbols_file).read_text().splitlines():
+        s = line.strip().upper()
+        if s and not s.startswith("#"):
+            wanted.append(s)
+    cols = panels["close"].columns
+    present = [s for s in wanted if s in cols]
+    missing = [s for s in wanted if s not in cols]
+    if missing:
+        print(f"  note: {len(missing)} symbol(s) not in dataset, skipped: {', '.join(missing)}")
+    if not present:
+        raise ValueError(f"None of the symbols in {symbols_file} are in the panel.")
+    return {"close": panels["close"][present], "turnover": panels["turnover"][present]}, present
+
+
 def plot_equity(variants: dict, outdir: Path):
     fig, ax = plt.subplots(figsize=(11, 6))
     for name, res in variants.items():
@@ -129,6 +146,10 @@ def main():
     ap.add_argument("--start", default="2018-01-01", help="Backtest start (8-year window)")
     ap.add_argument("--end", default=None, help="Backtest end")
     ap.add_argument("--cost-bps", type=float, default=25.0, help="Cost per side, bps")
+    ap.add_argument("--symbols-file", default=None,
+                    help="Restrict the universe to symbols in this file (e.g. data/nifty50.txt)")
+    ap.add_argument("--min-turnover", type=float, default=None,
+                    help="Override min median daily turnover filter, INR")
     ap.add_argument("--outdir", default="output")
     args = ap.parse_args()
 
@@ -138,25 +159,32 @@ def main():
     print("Loading weekly panels...")
     panels_all = load_or_build(args.daily_dir, args.cache, rebuild=args.rebuild, start=args.panel_start)
     panels = _slice(panels_all, args.start, args.end)
+    if args.symbols_file:
+        panels, present = _subset_symbols(panels, args.symbols_file)
+        print(f"Restricted universe to {len(present)} named symbols from {args.symbols_file}")
     c = panels["close"]
     print(f"Backtest universe: {c.shape[1]} symbols, {c.shape[0]} weeks "
           f"({c.index.min().date()} -> {c.index.max().date()})")
 
-    # --- Variants ---------------------------------------------------------
-    literal = StrategyConfig(cost_bps_per_side=args.cost_bps)
-    # Liquid-only: restrict to genuinely tradable large/mid caps.
-    liquid = StrategyConfig(cost_bps_per_side=args.cost_bps, min_med_turnover=2e8)
-    # Long-only reversion (drop the loss-making short leg).
-    long_only = StrategyConfig(cost_bps_per_side=args.cost_bps, short_size=0.0)
+    # For a small, already-liquid named universe (e.g. Nifty 50) the turnover
+    # gate is redundant; relax it so the whole list stays tradable.
+    min_turn = args.min_turnover if args.min_turnover is not None else (
+        1e5 if args.symbols_file else StrategyConfig.min_med_turnover
+    )
 
-    # Gross (zero-cost) literal run isolates the raw edge from trading costs.
-    gross = StrategyConfig(cost_bps_per_side=0.0)
+    # --- Variants ---------------------------------------------------------
+    literal = StrategyConfig(cost_bps_per_side=args.cost_bps, min_med_turnover=min_turn)
+    # Gross (zero-cost) run isolates the raw edge from trading costs.
+    gross = StrategyConfig(cost_bps_per_side=0.0, min_med_turnover=min_turn)
+    # Each leg on its own.
+    long_only = StrategyConfig(cost_bps_per_side=args.cost_bps, min_med_turnover=min_turn, short_size=0.0)
+    short_only = StrategyConfig(cost_bps_per_side=args.cost_bps, min_med_turnover=min_turn, long_size=0.0)
 
     variants = {
         "Literal 5/10": run_backtest(panels, literal),
         "Literal 5/10 (gross, no costs)": run_backtest(panels, gross),
-        "Liquid universe only": run_backtest(panels, liquid),
         "Long leg only": run_backtest(panels, long_only),
+        "Short leg only": run_backtest(panels, short_only),
     }
 
     summaries = {}

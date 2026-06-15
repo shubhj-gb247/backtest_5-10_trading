@@ -48,6 +48,10 @@ basis — see [Methodology → the capital convention](#the-capital-convention).
 4. **Transaction costs are decisive.** With ~109,000 round-trips, costs alone
    came to ~3,540 units. The break-even cost is essentially **0 bps** — and even
    that only on a gross *dollar* basis, not per unit of capital.
+5. **Shrinking to Nifty 50 helps a lot** and shows the signal is *half* right:
+   the long "buy-the-dip" leg has a real large-cap edge (Sharpe ~0.44 gross),
+   while shorting winners stays a loser because large-caps trend. See
+   [What if we shrink the universe to Nifty 50?](#what-if-we-shrink-the-universe-to-nifty-50).
 
 ![Equity curves](output/equity_curve.png)
 
@@ -93,6 +97,66 @@ spread instead of paying ~50 bps round-trip, and you can manage the tail.
 The long leg (green) actually recovers strongly after 2024 and spikes on every
 crash-rebound; the short leg (red) bleeds almost monotonically. The combined
 line is dominated by the short leg's losses.
+
+---
+
+## What if we shrink the universe to Nifty 50?
+
+A natural follow-up: maybe the full ~2,900-name universe is too noisy and
+costly, and the strategy behaves better in clean, liquid large-caps. We re-ran
+it on the **Nifty 50** (49 names resolve in the dataset; same 2018–2026 window).
+Reproduce with:
+
+```bash
+python run_backtest.py --daily-dir /unused --symbols-file data/nifty50.txt \
+    --start 2018-01-01 --end 2026-06-12 --outdir output/nifty50
+```
+
+**This changes the picture a lot — and isolates where the edge actually lives.**
+Large-caps rarely move ±5/±10% in a week, so signals are sparse (avg **4 longs /
+1 short per week**), but the per-trade behaviour is much cleaner:
+
+| Variant | Gross Sharpe | Gross weekly win % | Net Sharpe (25 bps) | Edge survives cost up to |
+|---|---:|---:|---:|---:|
+| **Long leg** (buy −5% losers) | **+0.44** | 55% | −0.33 (≈ break-even, +4.7 units) | **~10–12 bps/side** |
+| Literal 5/10 (both legs) | +0.11 | 51% | −0.80 | ~5 bps/side |
+| **Short leg** (short +10% winners) | **−0.79** | 41% | −1.51 | never (loses even gross) |
+
+Forward-return diagnostic on Nifty 50 (next-week return by prior-week bucket):
+
+| Prior-week bucket | mean next-wk | median next-wk | % positive |
+|---|---:|---:|---:|
+| < −10% | +0.69% | +1.19% | 55% |
+| −10…−5% | +0.53% | +0.67% | 57% |
+| **> +10%** | **+0.73%** | **+0.71%** | **57%** |
+
+**Findings on the small universe:**
+
+1. **The long "buy-the-dip" leg has a real edge in large-caps.** Nifty losers
+   reliably bounce (a −5%…−10% week is followed by +0.53% on average, 57% of the
+   time positive). Gross, the long leg runs at **Sharpe ~0.44** with a 59%
+   *monthly* win rate — the closest thing here to Narang's "steady" profile.
+2. **But it's thin, and costs decide it.** That edge is ~10–30 bps/week. It
+   stays profitable only up to ~10–12 bps per side; at a retail 25 bps it is
+   essentially break-even (+4.7 units over 7 years). You need
+   institutional/HFT-level costs — exactly the environment Narang operates in —
+   to bank it.
+3. **The short "fade-the-rip" leg is simply wrong for large-caps.** Nifty 50
+   winners *keep winning* (a +10% week is followed by another +0.73%): large-cap
+   momentum, not reversion. Shorting them loses **even at zero cost** (Sharpe
+   −0.79), and drags the combined strategy below break-even.
+4. **Net effect:** shrinking the universe turns a catastrophic loser into a
+   roughly break-even strategy *gross*, and shows the signal is half-right —
+   keep the long leg, drop the short leg. The literal symmetric 5/10 still
+   loses after realistic costs.
+
+> Caveat specific to this cut: using *today's* Nifty 50 across all of 2018–2026
+> bakes in membership look-ahead (these are the survivors), which flatters the
+> long leg. And with only ~4 names a week the equity curve is noisy/undiversified
+> — read the Sharpe and win-rate, not the compounded curve, which suffers
+> volatility-drag from the tiny book. See `output/nifty50/`.
+
+![Nifty 50 equity curves](output/nifty50/equity_curve.png)
 
 ---
 

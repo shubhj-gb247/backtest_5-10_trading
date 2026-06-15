@@ -1,0 +1,54 @@
+# Nifty 50 constituents (NSE symbols), as of 2026.
+# Note: this is the *current* membership applied across the whole 2018-2026
+# window, which introduces index-membership look-ahead bias (today's Nifty 50
+# are survivors). TATAMOTORS is absent from the dataset (2025 demerger); ZOMATO
+# trades as ETERNAL. 49 names resolve against the eod2_data panel.
+ADANIENT
+ADANIPORTS
+APOLLOHOSP
+ASIANPAINT
+AXISBANK
+BAJAJ-AUTO
+BAJFINANCE
+BAJAJFINSV
+BEL
+BHARTIARTL
+CIPLA
+COALINDIA
+DRREDDY
+EICHERMOT
+ETERNAL
+GRASIM
+HCLTECH
+HDFCBANK
+HDFCLIFE
+HEROMOTOCO
+HINDALCO
+HINDUNILVR
+ICICIBANK
+INDUSINDBK
+INFY
+ITC
+JIOFIN
+JSWSTEEL
+KOTAKBANK
+LT
+M&M
+MARUTI
+NESTLEIND
+NTPC
+ONGC
+POWERGRID
+RELIANCE
+SBILIFE
+SBIN
+SHRIRAMFIN
+SUNPHARMA
+TATACONSUM
+TATASTEEL
+TCS
+TECHM
+TITAN
+TRENT
+ULTRACEMCO
+WIPRO
