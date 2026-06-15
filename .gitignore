@@ -1,0 +1,13 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Raw upstream dataset (large; cloned via scripts/fetch_data.sh)
+eod2_data/
+data/eod2_data/
+
+# Keep the small weekly Parquet cache (data/weekly.*.parquet) committed so the
+# backtest reproduces offline, but ignore anything else dropped in data/.
+data/*.csv
