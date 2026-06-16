@@ -1,0 +1,12 @@
+{
+  "days": 1973,
+  "mean_daily_%": -0.616,
+  "median_daily_%": -0.64,
+  "std_daily_%": 2.25,
+  "pos_days_%": 35.9,
+  "days_ge_+1%": 18.9,
+  "best_day_%": 13.83,
+  "worst_day_%": -43.01,
+  "final_equity_x": 0.0,
+  "max_drawdown_%": -100.0
+}
