@@ -1,0 +1,13 @@
+capital,scenario,net_cagr_%,year_end_Rs,profit_Rs
+10000,Bad year (bear/drawdown),-27.0,7300,-2700
+10000,Conservative,6.0,10600,600
+10000,Base case,11.0,11100,1100
+10000,Good year,18.0,11800,1800
+50000,Bad year (bear/drawdown),-25.4,37300,-12700
+50000,Conservative,7.6,53800,3800
+50000,Base case,12.6,56300,6300
+50000,Good year,19.6,59800,9800
+100000,Bad year (bear/drawdown),-25.2,74800,-25200
+100000,Conservative,7.8,107800,7800
+100000,Base case,12.8,112800,12800
+100000,Good year,19.8,119800,19800
