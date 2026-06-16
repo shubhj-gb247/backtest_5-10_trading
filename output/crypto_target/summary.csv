@@ -1,0 +1,6 @@
+strategy,net_bps_per_day,ann_%,sharpe,maxDD_%,final_x,hits_0.2%/day
+"A. Minute MR (fade), minute, taker",-163.4,-596.3,-13.03,-100.0,0.0,False
+"A. Minute momentum (ride), minute, taker",-221.0,-806.8,-15.08,-100.0,0.0,False
+"B. Hourly MOMENTUM, taker 7.5bps",7.1,25.8,0.54,-50.1,2.76,False
+"B. Hourly MOMENTUM, maker 3bps (optimistic)",13.0,47.6,1.0,-47.1,12.87,False
+"C. Hourly mean-reversion, maker",-21.0,-76.6,-1.62,-99.8,0.0,False

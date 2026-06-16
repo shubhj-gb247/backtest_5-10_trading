@@ -1,0 +1,11 @@
+{
+  "winner": "Hourly BTC time-series momentum (24h VWAP z>2), taker fees",
+  "net_pct_per_day": 0.071,
+  "sharpe": 0.54,
+  "split_2018_2021_bps": 9.9,
+  "split_2022_2025_bps": 3.3,
+  "leverage_to_hit_0.2pct": 2.8,
+  "maxDD_at_that_leverage_pct": -142.0,
+  "indian_TDS_drag_pct_per_day": 0.6,
+  "gross_edge_pct_per_day": 0.17
+}
