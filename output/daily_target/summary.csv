@@ -1,0 +1,6 @@
+strategy,net_bps_per_day,ann_return_%,sharpe,maxDD_%,hits_0.2%/day_target
+A. Intraday VWAP mean-reversion,-210.49,,,,False
+B. Intraday VWAP momentum,-220.89,,,,False
+C. Intraday stat-arb pairs,-29.57,-74.5,-10.05,-99.7,False
+D1. Overnight stat-arb (20 bps/leg cost),-0.06,-0.2,-0.02,-22.4,False
+"D2. Overnight stat-arb (10 bps/leg, futures)",1.46,3.7,0.58,-10.4,False

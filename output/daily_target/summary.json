@@ -1,0 +1,42 @@
+[
+  {
+    "strategy": "A. Intraday VWAP mean-reversion",
+    "net_bps_per_day": -210.49,
+    "ann_return_%": null,
+    "sharpe": null,
+    "maxDD_%": null,
+    "hits_0.2%/day_target": false
+  },
+  {
+    "strategy": "B. Intraday VWAP momentum",
+    "net_bps_per_day": -220.89,
+    "ann_return_%": null,
+    "sharpe": null,
+    "maxDD_%": null,
+    "hits_0.2%/day_target": false
+  },
+  {
+    "strategy": "C. Intraday stat-arb pairs",
+    "net_bps_per_day": -29.57,
+    "ann_return_%": -74.5,
+    "sharpe": -10.05,
+    "maxDD_%": -99.7,
+    "hits_0.2%/day_target": "False"
+  },
+  {
+    "strategy": "D1. Overnight stat-arb (20 bps/leg cost)",
+    "net_bps_per_day": -0.06,
+    "ann_return_%": -0.2,
+    "sharpe": -0.02,
+    "maxDD_%": -22.4,
+    "hits_0.2%/day_target": "False"
+  },
+  {
+    "strategy": "D2. Overnight stat-arb (10 bps/leg, futures)",
+    "net_bps_per_day": 1.46,
+    "ann_return_%": 3.7,
+    "sharpe": 0.58,
+    "maxDD_%": -10.4,
+    "hits_0.2%/day_target": "False"
+  }
+]
